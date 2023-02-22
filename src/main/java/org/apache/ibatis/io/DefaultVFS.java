@@ -14,6 +14,7 @@
  *    limitations under the License.
  */
 package org.apache.ibatis.io;
+import io.openpixee.security.BoundedLineReader;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -97,7 +98,7 @@ public class DefaultVFS extends VFS {
             is = url.openStream();
             List<String> lines = new ArrayList<>();
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
-              for (String line; (line = reader.readLine()) != null;) {
+              for (String line; (line = BoundedLineReader.readLine(reader, 1000000)) != null;) {
                 if (log.isDebugEnabled()) {
                   log.debug("Reader entry: " + line);
                 }
