@@ -15,6 +15,7 @@
  */
 package org.apache.ibatis.jdbc;
 
+import io.openpixee.security.BoundedLineReader;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.io.Reader;
@@ -130,7 +131,7 @@ public class ScriptRunner {
     try {
       BufferedReader lineReader = new BufferedReader(reader);
       String line;
-      while ((line = lineReader.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(lineReader, 1000000)) != null) {
         script.append(line);
         script.append(LINE_SEPARATOR);
       }
@@ -150,7 +151,7 @@ public class ScriptRunner {
     try {
       BufferedReader lineReader = new BufferedReader(reader);
       String line;
-      while ((line = lineReader.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(lineReader, 1000000)) != null) {
         handleLine(command, line);
       }
       commitConnection();
