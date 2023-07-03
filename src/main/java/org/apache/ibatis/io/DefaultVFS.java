@@ -15,6 +15,9 @@
  */
 package org.apache.ibatis.io;
 
+import io.github.pixee.security.BoundedLineReader;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -97,7 +100,7 @@ public class DefaultVFS extends VFS {
             is = url.openStream();
             List<String> lines = new ArrayList<>();
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
-              for (String line; (line = reader.readLine()) != null;) {
+              for (String line; (line = BoundedLineReader.readLine(reader, 1000000)) != null;) {
                 if (log.isDebugEnabled()) {
                   log.debug("Reader entry: " + line);
                 }
@@ -149,7 +152,7 @@ public class DefaultVFS extends VFS {
         for (String child : children) {
           String resourcePath = path + "/" + child;
           resources.add(resourcePath);
-          URL childUrl = new URL(prefix + child);
+          URL childUrl = Urls.create(prefix + child, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
           resources.addAll(list(childUrl, resourcePath));
         }
       }
@@ -234,7 +237,7 @@ public class DefaultVFS extends VFS {
     boolean continueLoop = true;
     while (continueLoop) {
       try {
-        url = new URL(url.getFile());
+        url = Urls.create(url.getFile(), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         if (log.isDebugEnabled()) {
           log.debug("Inner URL: " + url);
         }
@@ -260,7 +263,7 @@ public class DefaultVFS extends VFS {
 
     // Try to open and test it
     try {
-      URL testUrl = new URL(jarUrl.toString());
+      URL testUrl = Urls.create(jarUrl.toString(), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
       if (isJar(testUrl)) {
         return testUrl;
       }
