@@ -15,6 +15,7 @@
  */
 package org.apache.ibatis.executor.loader;
 
+import io.github.pixee.security.ObjectInputFilters;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Externalizable;
@@ -108,6 +109,7 @@ public abstract class AbstractSerialStateHolder implements Externalizable {
 
     /* First run */
     try (ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(this.userBeanBytes))) {
+      ObjectInputFilters.enableObjectFilterIfUnprotected(in);
       this.userBean = in.readObject();
       this.unloadedProperties = (Map<String, ResultLoaderMap.LoadPair>) in.readObject();
       this.objectFactory = (ObjectFactory) in.readObject();
