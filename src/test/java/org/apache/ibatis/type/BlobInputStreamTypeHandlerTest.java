@@ -15,6 +15,7 @@
  */
 package org.apache.ibatis.type;
 
+import io.github.pixee.security.BoundedLineReader;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -143,7 +144,7 @@ class BlobInputStreamTypeHandlerTest extends BaseTypeHandlerTest {
       // select (Blob -> InputStream)
       {
         BlobContent blobContent = mapper.findOne(1);
-        assertThat(new BufferedReader(new InputStreamReader(blobContent.getContent())).readLine()).isEqualTo("Hello");
+        assertThat(BoundedLineReader.readLine(new BufferedReader(new InputStreamReader(blobContent.getContent())), 5_000_000)).isEqualTo("Hello");
       }
     }
 
