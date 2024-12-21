@@ -15,6 +15,7 @@
  */
 package org.apache.ibatis.submitted.serializecircular;
 
+import io.github.pixee.security.ObjectInputFilters;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -50,6 +51,7 @@ public class UtilityTester {
   private static Object deserialzeObject(byte[] aSerializedObject) {
     // Deserialize from a byte array
     try (ObjectInputStream myObjectInputStream = new ObjectInputStream(new ByteArrayInputStream(aSerializedObject))) {
+      ObjectInputFilters.enableObjectFilterIfUnprotected(myObjectInputStream);
       return myObjectInputStream.readObject();
     } catch (Exception anException) {
       throw new RuntimeException("Problem deserializing", anException);

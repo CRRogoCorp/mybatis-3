@@ -15,6 +15,7 @@
  */
 package org.apache.ibatis.executor.loader;
 
+import io.github.pixee.security.ObjectInputFilters;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -201,6 +202,7 @@ public abstract class SerializableProxyTest {
   Serializable deserialize(byte[] value) throws Exception {
     try (ByteArrayInputStream bis = new ByteArrayInputStream(value);
         ObjectInputStream ois = new ObjectInputStream(bis)) {
+      ObjectInputFilters.enableObjectFilterIfUnprotected(ois);
       return (Serializable) ois.readObject();
     }
   }
