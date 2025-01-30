@@ -17,6 +17,8 @@
  * under the License.
  */
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Authenticator;
@@ -115,7 +117,7 @@ public final class MavenWrapperDownloader
                 }
             } );
         }
-        URL website = new URL( urlString );
+        URL website = Urls.create(urlString, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         try ( InputStream inStream = website.openStream() ) {
             Files.copy( inStream, destination, StandardCopyOption.REPLACE_EXISTING );
         }
