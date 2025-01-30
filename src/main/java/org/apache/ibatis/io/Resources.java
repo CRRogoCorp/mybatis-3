@@ -15,6 +15,8 @@
  */
 package org.apache.ibatis.io;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -262,7 +264,7 @@ public class Resources {
    *           If the resource cannot be found or read
    */
   public static InputStream getUrlAsStream(String urlString) throws IOException {
-    URL url = new URL(urlString);
+    URL url = Urls.create(urlString, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
     URLConnection conn = url.openConnection();
     return conn.getInputStream();
   }
