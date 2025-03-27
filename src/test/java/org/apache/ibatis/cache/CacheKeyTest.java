@@ -15,6 +15,7 @@
  */
 package org.apache.ibatis.cache;
 
+import static io.github.pixee.security.ObjectInputFilters.createSafeObjectInputStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -129,7 +130,7 @@ class CacheKeyTest {
     new ObjectOutputStream(baos).writeObject(object);
 
     ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-    return (T) new ObjectInputStream(bais).readObject();
+    return (T) createSafeObjectInputStream(bais).readObject();
   }
 
 }
