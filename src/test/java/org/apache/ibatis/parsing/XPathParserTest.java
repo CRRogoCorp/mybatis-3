@@ -15,6 +15,7 @@
  */
 package org.apache.ibatis.parsing;
 
+import io.github.pixee.security.BoundedLineReader;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.BufferedReader;
@@ -172,7 +173,7 @@ class XPathParserTest {
     try (BufferedReader bufferedReader = new BufferedReader(Resources.getResourceAsReader(resource))) {
       StringBuilder sb = new StringBuilder();
       String temp;
-      while ((temp = bufferedReader.readLine()) != null) {
+      while ((temp = BoundedLineReader.readLine(bufferedReader, 5_000_000)) != null) {
         sb.append(temp);
       }
       return sb.toString();
