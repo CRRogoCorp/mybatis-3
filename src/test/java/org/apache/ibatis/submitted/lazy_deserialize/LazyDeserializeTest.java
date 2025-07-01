@@ -15,6 +15,7 @@
  */
 package org.apache.ibatis.submitted.lazy_deserialize;
 
+import io.github.pixee.security.ObjectInputFilters;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -106,6 +107,7 @@ class LazyDeserializeTest {
   private LazyObjectFoo deserializeFoo(final byte[] serializedFoo) throws Exception {
     try (ByteArrayInputStream bis = new ByteArrayInputStream(serializedFoo);
         ObjectInputStream ios = new ObjectInputStream(bis)) {
+      ObjectInputFilters.enableObjectFilterIfUnprotected(ios);
       return (LazyObjectFoo) ios.readObject();
     }
   }
