@@ -15,6 +15,7 @@
  */
 package org.apache.ibatis.type;
 
+import io.github.pixee.security.BoundedLineReader;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -141,7 +142,7 @@ class ClobReaderTypeHandlerTest extends BaseTypeHandlerTest {
       // select (Clob -> Reader)
       {
         ClobContent clobContent = mapper.findOne(1);
-        assertThat(new BufferedReader(clobContent.getContent()).readLine()).isEqualTo("Hello");
+        assertThat(BoundedLineReader.readLine(new BufferedReader(clobContent.getContent()), 5_000_000)).isEqualTo("Hello");
       }
     }
 
